@@ -11,5 +11,5 @@ $response = twitterYQL::getUserGeoLocation("alganet");
 var_dump($response);
 
 
-$response = twitterYQL::getGeoInfo("1");
+$response = twitterYQL::getGeoInfo("sao paulo sp brazil");
 var_dump($response);
