@@ -16,3 +16,7 @@ $responses = YQL::multiQuery(
 
 echo "<h1>multi</h1>";
 var_dump($responses);
+
+echo "<h1>parameter</h1>";
+$params  = YQL::query('SELECT * FROM search.news where query=:1', 'aids');
+var_dump($params);
