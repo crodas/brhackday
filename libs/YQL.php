@@ -31,7 +31,7 @@ class YQL
             throw new Exception(curl_error($ch));
         }
         curl_close($ch);
-        return json_decode($res);
+        return json_decode($res, true);
     }
     public static function multiQuery(array $sql) 
     {

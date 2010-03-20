@@ -1,21 +1,24 @@
 <?php
 require "../config.php";
 require "models/sources.php";
+require "models/news.php";
 require "YQL.php";
- 
-/*
-$source = new Sources;
-$source->name = "Google News";
-$source->rss = "http://news.google.com/news?pz=1&cf=all&ned=en&hl=en&topic=h&num=3&output=rss";
-$source->save();
-*/
- 
+
 $sources = new Sources;
 $sources->where("last_crawl <", new MongoDate(strtotime("-1 minutes")));
-$sources->where("last_crawl <", new MongoDate());
- 
+
 foreach ($sources as $source) {
     $results = YQL::query("SELECT * FROM rss WHERE url = :1", $source->rss);
-    var_dump($results->results);
+    if (is_array($results['query']['results']['item'])) {
+        foreach ($results['query']['results']['item'] as $id => $news) {
+            $n = new News;
+            $n->source  = $source->getID(); 
+            $n->title   = $news['title'];
+            $n->content = $news['description'];
+            $n->url     = $news['link'];
+            $n->save(false);
+        }
+    } 
     $source->save();
 }
+
