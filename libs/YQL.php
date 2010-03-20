@@ -3,7 +3,7 @@
 // Really simple YQL abstraction
 class YQL 
 {
-    static function query($sql)
+    public static function query($sql)
     {
         // simple SQL variable binding support
         $params = func_get_args();
@@ -12,7 +12,7 @@ class YQL
         }
 
         $sql = urlencode($sql);
-        $url = "http://query.yahooapis.com/v1/public/yql?q={$sql}&format=json&diagnostics=false";
+        $url = "http://query.yahooapis.com/v1/public/yql?q={$sql}&format=json&diagnostics=false&env=store://datatables.org/alltableswithkeys";
 
 
         $ch = curl_init();
@@ -32,6 +32,11 @@ class YQL
         }
         curl_close($ch);
         return json_decode($res);
+    }
+    public static function multiQuery(array $sql) 
+    {
+        $sql = implode(';', $sql);
+        return static::query("SELECT * FROM query.multi where queries=\"$sql\"");
     }
 }
 
