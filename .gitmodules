@@ -1,0 +1,3 @@
+[submodule "libs/ActiveMongo"]
+	path = libs/ActiveMongo
+	url = git://github.com/crodas/ActiveMongo.git
