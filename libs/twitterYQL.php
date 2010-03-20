@@ -1,5 +1,5 @@
 <?php
-require_once "";
+require_once "YQL.php";
 class twitterYQL extends YQL{
 	public static function getUserIds($tag)
     {
