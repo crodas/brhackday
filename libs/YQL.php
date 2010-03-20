@@ -5,8 +5,15 @@ class YQL
 {
     static function query($sql)
     {
+        // simple SQL variable binding support
+        $params = func_get_args();
+        for ($i=0; $i < count($params); $i++) {
+            $sql = str_replace(":{$i}", '"'.addslashes($params[$i]).'"', $sql);
+        }
+
         $sql = urlencode($sql);
         $url = "http://query.yahooapis.com/v1/public/yql?q={$sql}&format=json&diagnostics=false";
+
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
