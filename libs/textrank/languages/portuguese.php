@@ -1,6 +1,6 @@
 <?php
 
-class TR_Lang_Spanish extends TR_Language
+class TR_Lang_Portuguese extends TR_Language
 {
     protected $stop = array(
         "último"=>1,

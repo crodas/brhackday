@@ -38,7 +38,7 @@ abstract class TR_Language
             $file = dirname(__FILE__)."/{$file}";
         }
         if (!is_readable($file)) {
-            throw new LangException;
+            throw new LangException("Imposible to load {$name} lang file");
         }
         if (isset(self::$_loaded[$file])) {
             return;

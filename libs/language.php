@@ -7,7 +7,6 @@ function get_language($text)
     $tc->setDirectory(dirname(__FILE__).'/texts/');
     $result = $tc->getCategory($text);
     if (is_array($result)) {
-        var_dump(array($text, $result));die();
         $result = $result[0];
     }
     unset($tc);
