@@ -26,5 +26,6 @@ class News extends ActiveMongo
     {
         $this->addIndex(array("source" => 1));
         $this->addIndex(array("url" => 1), array("unique" => 1));
+        $this->addIndex(array("processed" => 1));
     }
 }

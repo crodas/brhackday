@@ -19,6 +19,7 @@ class YQL
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, 0) ;
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1) ;
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20); 
         if (defined("GLOBAL_PROXY")) {
             curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
             curl_setopt($ch, CURLOPT_PROXY, GLOBAL_PROXY); 
