@@ -6,7 +6,7 @@ class YQL
     public static function query($sql)
     {
         $sql = urlencode($sql);
-        $url = "http://query.yahooapis.com/v1/public/yql?q={$sql}&format=json&diagnostics=false";
+        $url = "http://query.yahooapis.com/v1/public/yql?q={$sql}&format=json&diagnostics=false&env=store://datatables.org/alltableswithkeys";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -29,7 +29,7 @@ class YQL
     public static function multiQuery(array $sql) 
     {
         $sql = implode(';', $sql);
-        return static::query("USE 'http://www.datatables.org/data/query.multi.xml' as query.multi; SELECT * FROM query.multi where queries=\"$sql\"");
+        return static::query("SELECT * FROM query.multi where queries=\"$sql\"");
     }
 }
 
