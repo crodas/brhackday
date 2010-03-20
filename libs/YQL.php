@@ -3,7 +3,7 @@
 // Really simple YQL abstraction
 class YQL 
 {
-    static function query($sql)
+    public static function query($sql)
     {
         $sql = urlencode($sql);
         $url = "http://query.yahooapis.com/v1/public/yql?q={$sql}&format=json&diagnostics=false";
@@ -25,6 +25,11 @@ class YQL
         }
         curl_close($ch);
         return json_decode($res);
+    }
+    public static function multiQuery(array $sql) 
+    {
+        $sql = implode(';', $sql);
+        return static::query("USE 'http://www.datatables.org/data/query.multi.xml' as query.multi; SELECT * FROM query.multi where queries=\"$sql\"");
     }
 }
 
