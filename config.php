@@ -3,8 +3,10 @@
 // configuration issues
 
 // use a global proxy
-if ($_SERVER['HTTP_HOST'] == 'localhost') define("GLOBAL_PROXY", "10.99.0.100:128");
-define("GLOBAL_PROXY_AUTH", "cesar.rodas:164cr2010");
+if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == 'localhost') {
+    define("GLOBAL_PROXY", "10.99.0.100:128");
+    define("GLOBAL_PROXY_AUTH", "cesar.rodas:164cr2010");
+}
 define("MIN_WORD", 30);
 
 // setup include path
