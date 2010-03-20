@@ -6,7 +6,6 @@ require "YQL.php";
 
 $sources = new Sources;
 $sources->where("last_crawl <", new MongoDate(strtotime("-1 minutes")));
-$sources->where("last_crawl <", new MongoDate());
 
 foreach ($sources as $source) {
     $results = YQL::query("SELECT * FROM rss WHERE url = :1", $source->rss);
@@ -17,7 +16,7 @@ foreach ($sources as $source) {
             $n->title   = $news['title'];
             $n->content = $news['description'];
             $n->url     = $news['link'];
-            $n->save();
+            $n->save(false);
         }
     } 
     $source->save();
