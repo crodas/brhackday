@@ -582,8 +582,7 @@ class TR_Lang_English extends TR_Language
         try {
             $req = new  Lexicon;
             $req->lang  = 'en';
-            $req->token = array_unique($words); 
-            $req->load();
+            $req->where('token', array_unique($words));
             foreach ($req as $l) {
                 $val = array($l->type);
                 if (count($l->extra) > 0) {
