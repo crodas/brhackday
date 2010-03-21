@@ -1,0 +1,1 @@
+{"tags":[{'tag':'php','forca':10},{'tag':'sao paulo','forca':6},{'tag':'paulista','forca':8}]}
