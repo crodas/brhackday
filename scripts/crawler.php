@@ -15,8 +15,8 @@ foreach ($sources as $source) {
         $results = YQL::query("SELECT * FROM rss WHERE url = :1", $source->rss);
         if (@is_array($results['query']['results']['item'])) {
             foreach ($results['query']['results']['item'] as $id => $news) {
-                if (is_array($news['description'])) {
-                    $news['description'] = implode("\n", $news['description']);
+                if (@is_array($news['description'])) {
+                    $news['description'] = r_implode("\n", $news['description']);
                 }
 
                 $n = new News;
@@ -24,14 +24,12 @@ foreach ($sources as $source) {
                 $n->title    = $news['title'];
                 $n->content  = trim(strip_tags($news['description']));
                 $n->url      = $news['link'];
-
-                $content = YQL::query("SELECT * FROM html WHERE url = :1 and xpath in({$source->xpath})", $news['link']);
-                if (@is_array($content['query']['results'])) {
-                    $n->text     = clean_html($content['query']['results']);
-                }
-
                 try {
-                    $n->save(false);
+                    $n->save(true);
+                    $content = YQL::query("SELECT * FROM html WHERE url = :1 and xpath in({$source->xpath})", $news['link']);
+                    if (@is_array($content['query']['results'])) {
+                        $n->text = clean_html($content['query']['results']);
+                    }
                 } catch (Exception $e) {}
             }
         }

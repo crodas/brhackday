@@ -10,10 +10,10 @@ class YQL
         for ($i=0; $i < count($params); $i++) {
             $sql = str_replace(":{$i}", '"'.addslashes($params[$i]).'"', $sql);
         }
+        var_dump($sql);
 
         $sql = urlencode($sql);
         $url = "http://query.yahooapis.com/v1/public/yql?q={$sql}&format=json&diagnostics=false&env=store://datatables.org/alltableswithkeys";
-
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
