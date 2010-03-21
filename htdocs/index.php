@@ -5,12 +5,17 @@
     <title>Metal Archive, the app</title>   
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/fonts/fonts-min.css" />
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" />
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/button/assets/skins/sam/button.css" />
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/container/assets/skins/sam/container.css" />
 	<link rel="stylesheet" type="text/css" href="treeview-menu.css" />
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script>
     <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js"></script>
     <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script>
 	<script src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>
-	
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/container/container-min.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/button/button-min.js"></script>
+
 
 </head>
 <body class="yui-skin-sam">
@@ -140,7 +145,8 @@ function createTagLink(tag,force) {
 function createTitleNews(title,href) {
 	var elTitle = document.createElement("li");
 	//elTitle.setAttribute('class','title');
-	elTitle.innerHTML = '<h1><a href="'+href+'" rel="nofollow">'+title+'</a></h1>';
+	link = '"'+href+'"'
+	elTitle.innerHTML = '<h1><a href="#" onClick="fnClickNews('+link+')" rel="nofollow">'+title+'</a></h1>';
 	return elTitle;
 }
 function getTheNews(tag,obj) { 
@@ -251,7 +257,36 @@ function treeViewWords(tag)
 	//instance:
 	YAHOO.util.Event.onDOMReady(treeInit);
 }
+function fnNewsClick(href){
+	// Define various event handlers for Dialog
+	var handleLink = function() {
+		alert("You clicked yes!");
+		this.hide();
+	};
+	var handleMaps = function() {
+		this.hide();
+	};
 
+	// Instantiate the Dialog
+	oDialog = new YAHOO.widget.SimpleDialog("simpledialog1",
+											{ width: "300px",
+											  fixedcenter: true
+											  visible: false,
+											  draggable: false,
+											  close: true,
+											  text: "O que você gostaria de fazer?",
+											  icon: YAHOO.widget.SimpleDialog.ICON_HELP,
+											  constraintoviewport: true,
+											  buttons: [ { text:"Ler noticia", handler:handleLink, isDefault:true },
+														 { text:"Mapa",  handler:handleMaps } ]
+											} );
+	oDialog.setHeader("Ação");
+	
+	// Render the Dialog
+	oDialog.render(document.body);
+	oDialog.show();
+
+};
 </script>
 <div id="doc" class="yui-t7"> 
 	   <div id="hd" role="banner"><h1>Metal Archives</h1></div> 
@@ -282,9 +317,8 @@ function treeViewWords(tag)
 	YAHOO.util.Event.on("cloud", "click", function(e) { 
     	//YAHOO.log("target: " + e.target.id);
     	elTag = Dom.get(e.target).innerHTML;
-		alert(elTag);
-    		treeViewWords(elTag);
-    		createNews(elTag);
+    	treeViewWords(elTag);
+    	createNews(elTag);
  	});
  	YAHOO.util.Event.on("q","change", function(e){
  		//YAHOO.log("target: " + e.target.id);
