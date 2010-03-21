@@ -20,6 +20,12 @@ class News extends ActiveMongo
     {
         /* Putting the new News in our processing queue */
         $obj['processed'] = false;
+        $obj['created']   = new MongoDate;
+    }
+
+    function before_validate(&$obj)
+    {
+        $obj['updated'] = new MongoDate;
     }
     
     function setup()
@@ -27,5 +33,6 @@ class News extends ActiveMongo
         $this->addIndex(array("source" => 1));
         $this->addIndex(array("url" => 1), array("unique" => 1));
         $this->addIndex(array("processed" => 1));
+        $this->addIndex(array("processed" => 1, "updated" => 1, "created" => 1));
     }
 }

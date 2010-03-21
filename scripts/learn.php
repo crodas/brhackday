@@ -31,6 +31,7 @@ foreach ($news as $item) {
 
         $item->processed = true;
         $item->tags      = $keywords;
+        $item->lang      = $lang;
         $item->save();
     } catch (Exception $e) {
     }
