@@ -1,6 +1,6 @@
 <?php
 require "../config.php";
-require "libs/tags.php";
+require "models/tags.php";
 
 $tags = new Tags;
 $arrtags = array();
