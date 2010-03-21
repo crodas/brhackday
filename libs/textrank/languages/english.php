@@ -577,6 +577,7 @@ class TR_Lang_English extends TR_Language
 
     function setText($words)
     {
+        return;
         $ret = array(); 
         $lex = array();
         try {
@@ -585,7 +586,7 @@ class TR_Lang_English extends TR_Language
             $req->where('token', array_unique($words));
             foreach ($req as $l) {
                 $val = array($l->type);
-                if (count($l->extra) > 0) {
+                if (@count($l->extra) > 0) {
                     $val = array_merge($val, $l->extra); 
                 }
                 $lex[$l->token] = $val;

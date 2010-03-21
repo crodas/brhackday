@@ -3,9 +3,10 @@ require "../config.php";
 require "models/sources.php";
 require "models/news.php";
 require "YQL.php";
+require "text_processing.php";
 
 $sources = new Sources;
-$sources->where("last_crawl <", new MongoDate(strtotime("-1 minutes")));
+//$sources->where("last_crawl <", new MongoDate(strtotime("-1 minutes")));
 $sources->where("last_crawl <", new MongoDate(strtotime("1 minutes")));
 
 foreach ($sources as $source) {
@@ -17,11 +18,18 @@ foreach ($sources as $source) {
                 if (is_array($news['description'])) {
                     $news['description'] = implode("\n", $news['description']);
                 }
+
                 $n = new News;
-                $n->source  = $source->getID(); 
-                $n->title   = $news['title'];
-                $n->content = trim(strip_tags($news['description']));
-                $n->url     = $news['link'];
+                $n->source   = $source->getID(); 
+                $n->title    = $news['title'];
+                $n->content  = trim(strip_tags($news['description']));
+                $n->url      = $news['link'];
+
+                $content = YQL::query("SELECT * FROM html WHERE url = :1 and xpath in({$source->xpath})", $news['link']);
+                if (@is_array($content['query']['results'])) {
+                    $n->text     = clean_html($content['query']['results']);
+                }
+
                 try {
                     $n->save(false);
                 } catch (Exception $e) {}

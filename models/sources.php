@@ -4,9 +4,10 @@ class Sources extends ActiveMongo
 {
     public $name;
     public $rss;
+    public $xpath;
 
     static $validates_presence_of = array(
-        'name', 'rss',
+        'name', 'rss', 'xpath',
     );
 
     function before_validate(&$doc)
