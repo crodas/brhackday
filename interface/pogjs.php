@@ -91,10 +91,40 @@ body {
 <script type="text/javascript">
 var Dom = YAHOO.util.Dom,
 	YCM = YAHOO.util.Connect;
-function loadTagCloud() {
-    var elTags = {"tags":[{'tag':'php','forca':10},{'tag':'sao paulo','forca':6},{'tag':'paulista','forca':8}]}
+function getTheTags() { 
+	
+	var AjaxObject = {
+ 
+		handleSuccess:function(o) {
+			this.processResult(o);
+		}, 
+		handleFailure:function(o) {
+			alert('failure: getTheTags');
+		}, 
+		processResult:function(o) {			
+			response = eval('('+o.responseText+')');				
+			loadTagCloud(response);
+		}, 
+		startRequest:function() {			
+	   		var transaction = YCM.asyncRequest('GET', 'json.tags.js', callback);
+		}
+ 
+	};
+ 
+	var callback = {
+		success:AjaxObject.handleSuccess,
+		failure:AjaxObject.handleFailure,
+		scope: AjaxObject
+	};
+ 
+	// Start the transaction.
+	AjaxObject.startRequest();
+}
+function loadTagCloud(ElTags) {
+	
+    //var elTags = {"tags":[{'tag':'php','forca':10},{'tag':'sao paulo','forca':6},{'tag':'paulista','forca':8}]}
 	var elCloud = document.getElementById('cloud');	
-	var oTags = elTags.tags;
+	var oTags = ElTags.tags;
 	for(i in oTags) {
 		elCloud.appendChild(createTagLink(oTags[i].tag,oTags[i].forca));
 	}
@@ -120,7 +150,7 @@ function getTheNews(tag,obj) {
 			this.processResult(o);
 		}, 
 		handleFailure:function(o) {
-			alert(o.status);
+			alert('failure: getTheNews');
 		}, 
 		processResult:function(o) {
 			elNews = o.argument[0];
@@ -154,7 +184,7 @@ function createNews()
 	var elNews = new YAHOO.util.Element('newslist');
  
 	//add a click event handler to 'foo'
-	elNews.on('click', function(e) { alert('clicked'); });
+	//elNews.on('click', function(e) { alert('clicked'); });
  	
 	elNews.on('contentReady', function() {
     	var items = elNews.getElementsByTagName('li');
@@ -176,7 +206,7 @@ function treeViewWords(tag)
 			YAHOO.util.Event.preventDefault(e);
 		});
 		tree.subscribe("clickEvent",function(oArgs){
-			createNews();
+			createNews('');
 		});
 		
 	}
@@ -205,7 +235,7 @@ function treeViewWords(tag)
 	//node, stopping at a specific node depth:
 	function buildRandomTextBranch(node) {
 		if (node.depth < 6) {
-			YAHOO.log("buildRandomTextBranch: " + node.index);
+			//YAHOO.log("buildRandomTextBranch: " + node.index);
 			for ( var i = 0; i < Math.floor(Math.random() * 4) ; i++ ) {
 				var tmpNode = new YAHOO.widget.MenuNode(node.label + "-" + i, node, false);
 				buildRandomTextBranch(tmpNode);
@@ -218,16 +248,13 @@ function treeViewWords(tag)
 	//instance:
 	YAHOO.util.Event.onDOMReady(treeInit);
 }
+
 </script>
 <div id="doc" class="yui-t7"> 
 	   <div id="hd" role="banner"><h1>Metal Archives</h1></div> 
 	   <div id="bd" role="main">
 	   		<div class="yui-g"> 
-	    		<div id="cloud">
-	    			<a href="#" class="force-1">Tag forte</a>
-	    			<a href="#" class="force-2">Tag media</a>
-	    			<a href="#" class="force-3">Tag normal</a>
-	    			<a href="#" class="force-4">Tag fraca</a>
+	    		<div id="cloud">	    			
 	    		</div>
 	    	</div> 
 		<div class="yui-gd">		 
@@ -239,7 +266,7 @@ function treeViewWords(tag)
 	    	</div>
 	    	<div id="newsright" class="yui-u"> 
 		 		<h2 class="title">Noticias</h2>
-		 		<div id="xxxxnewslist">
+		 		<div id="list">
 		 			<ul id="newslist"></ul>
 		 		</div>
 	    	</div> 	    
@@ -248,15 +275,18 @@ function treeViewWords(tag)
 	<div id="ft" role="contentinfo"><p>Rodape</p></div> 
 </div>
 <script type="text/javascript">
-	loadTagCloud();	
+	//loadTagCloud();
+	getTheTags()	
 	YAHOO.util.Event.on("cloud", "click", function(e) { 
     	//YAHOO.log("target: " + e.target.id);
     	elTag = Dom.get(e.target).innerHTML;
     	treeViewWords(elTag);
-    	createNews();
+    	createNews(elTag);
  	});
  	YAHOO.util.Event.on("q","change", function(e){
- 		alert('here');
+ 		//YAHOO.log("target: " + e.target.id);
+    	elTag = Dom.get(e.target).innerHTML;
+    	createNews(elTag);
  	});
 
 </script>
