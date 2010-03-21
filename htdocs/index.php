@@ -270,7 +270,7 @@ function fnNewsClick(href){
 	// Instantiate the Dialog
 	oDialog = new YAHOO.widget.SimpleDialog("simpledialog1",
 											{ width: "300px",
-											  fixedcenter: true
+											  fixedcenter: true,
 											  visible: false,
 											  draggable: false,
 											  close: true,
