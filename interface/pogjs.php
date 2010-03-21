@@ -5,12 +5,17 @@
     <title>Metal Archive, the app</title>   
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/fonts/fonts-min.css" />
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" />
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/button/assets/skins/sam/button.css" />
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/container/assets/skins/sam/container.css" />
 	<link rel="stylesheet" type="text/css" href="treeview-menu.css" />
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script>
     <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js"></script>
     <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script>
 	<script src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>
-	
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/container/container-min.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/button/button-min.js"></script>
+
 
 </head>
 <body class="yui-skin-sam">
@@ -103,11 +108,12 @@ function getTheTags() {
 		}, 
 		processResult:function(o) {			
 			response = eval('('+o.responseText+')');	
+			
 			loadTagCloud(response);
 		}, 
 		startRequest:function() {
 			//alert('startRequest');
-	   		var transaction = YCM.asyncRequest('GET', 'json.tags.js', callback);
+	   		var transaction = YCM.asyncRequest('GET', 'json.tags.php', callback);
 		}
  
 	};
@@ -138,8 +144,10 @@ function createTagLink(tag,force) {
 }
 function createTitleNews(title,href) {
 	var elTitle = document.createElement("li");
-	//elTitle.setAttribute('class','title');
-	elTitle.innerHTML = '<h1><a href="'+href+'" rel="nofollow">'+title+'</a></h1>';
+	elTitle.innerHTML = '<h1><a id="a'+title+'" href="#" rel="nofollow">'+title+'</a></h1>';
+	YAHOO.util.Event.on("a"+title, "click", function(e) {
+		fnNewsClick(href);
+	});
 	return elTitle;
 }
 function getTheNews(tag,obj) { 
@@ -154,6 +162,7 @@ function getTheNews(tag,obj) {
 		}, 
 		processResult:function(o) {
 			elNews = o.argument[0];
+			Dom.get(elNews).innerHTML='';
 			response = eval('('+o.responseText+')');	
 			oItem = response.Results;					
 			for(i in oItem) {
@@ -162,7 +171,7 @@ function getTheNews(tag,obj) {
 		}, 
 		startRequest:function() {
 			//alert('startRequest');
-	   		var transaction = YCM.asyncRequest('GET', 'json.news.js?tag='+tag, callback);
+	   		var transaction = YCM.asyncRequest('GET', 'json.news.php?tag='+tag, callback);
 		}
  
 	};
@@ -177,8 +186,9 @@ function getTheNews(tag,obj) {
 	// Start the transaction.
 	AjaxObject.startRequest();
 }
-function createNews()
+function createNews(tag)
 {
+
 	//create a new instance of Element wrapping 
 	//'new', which isn' yet on the page
 	var elNews = new YAHOO.util.Element('newslist');
@@ -188,7 +198,7 @@ function createNews()
  	
 	elNews.on('contentReady', function() {
     	var items = elNews.getElementsByTagName('li');
-    	getTheNews('php',elNews);    	
+    	getTheNews(tag,elNews);    	
 	});
 
 }
@@ -248,7 +258,36 @@ function treeViewWords(tag)
 	//instance:
 	YAHOO.util.Event.onDOMReady(treeInit);
 }
+function fnNewsClick(dest){
+	// Define various event handlers for Dialog
+	var handleLink = function(e) {
+		window.location.href = dest;
+		this.hide();
+	};
+	var handleMaps = function() {
+		this.hide();
+	};
 
+	// Instantiate the Dialog
+	oDialog = new YAHOO.widget.SimpleDialog("simpledialog1",
+											{ width: "300px",
+											  fixedcenter: true,
+											  visible: false,
+											  draggable: false,
+											  close: true,
+											  text: "O que voce gostaria de fazer?",
+											  icon: YAHOO.widget.SimpleDialog.ICON_HELP,
+											  constraintoviewport: true,
+											  buttons: [ { text:"Ler noticia", handler:handleLink, isDefault:true},
+														 { text:"Mapa",  handler:handleMaps } ]
+											} );
+	oDialog.setHeader("Acoes do link");
+	
+	// Render the Dialog
+	oDialog.render(document.body);
+	oDialog.show();
+
+};
 </script>
 <div id="doc" class="yui-t7"> 
 	   <div id="hd" role="banner"><h1>Metal Archives</h1></div> 
@@ -284,8 +323,8 @@ function treeViewWords(tag)
  	});
  	YAHOO.util.Event.on("q","change", function(e){
  		//YAHOO.log("target: " + e.target.id);
-    	elTag = Dom.get(e.target).innerHTML;
-    	createNews(elTag);
+    		elTag = Dom.get(e.target).innerHTML;
+    		createNews(elTag);
  	});
 
 </script>
