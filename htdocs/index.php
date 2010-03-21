@@ -103,11 +103,12 @@ function getTheTags() {
 		}, 
 		processResult:function(o) {			
 			response = eval('('+o.responseText+')');	
+			
 			loadTagCloud(response);
 		}, 
 		startRequest:function() {
 			//alert('startRequest');
-	   		var transaction = YCM.asyncRequest('GET', 'json.tags.js', callback);
+	   		var transaction = YCM.asyncRequest('GET', 'json.tags.php', callback);
 		}
  
 	};
@@ -154,6 +155,7 @@ function getTheNews(tag,obj) {
 		}, 
 		processResult:function(o) {
 			elNews = o.argument[0];
+			Dom.get(elNews).innerHTML='';
 			response = eval('('+o.responseText+')');	
 			oItem = response.Results;					
 			for(i in oItem) {
@@ -162,7 +164,7 @@ function getTheNews(tag,obj) {
 		}, 
 		startRequest:function() {
 			//alert('startRequest');
-	   		var transaction = YCM.asyncRequest('GET', 'json.news.js?tag='+tag, callback);
+	   		var transaction = YCM.asyncRequest('GET', 'json.news.php?tag='+tag, callback);
 		}
  
 	};
@@ -177,8 +179,9 @@ function getTheNews(tag,obj) {
 	// Start the transaction.
 	AjaxObject.startRequest();
 }
-function createNews()
+function createNews(tag)
 {
+
 	//create a new instance of Element wrapping 
 	//'new', which isn' yet on the page
 	var elNews = new YAHOO.util.Element('newslist');
@@ -188,7 +191,7 @@ function createNews()
  	
 	elNews.on('contentReady', function() {
     	var items = elNews.getElementsByTagName('li');
-    	getTheNews('php',elNews);    	
+    	getTheNews(tag,elNews);    	
 	});
 
 }
@@ -279,13 +282,14 @@ function treeViewWords(tag)
 	YAHOO.util.Event.on("cloud", "click", function(e) { 
     	//YAHOO.log("target: " + e.target.id);
     	elTag = Dom.get(e.target).innerHTML;
-    	treeViewWords(elTag);
-    	createNews(elTag);
+		alert(elTag);
+    		treeViewWords(elTag);
+    		createNews(elTag);
  	});
  	YAHOO.util.Event.on("q","change", function(e){
  		//YAHOO.log("target: " + e.target.id);
-    	elTag = Dom.get(e.target).innerHTML;
-    	createNews(elTag);
+    		elTag = Dom.get(e.target).innerHTML;
+    		createNews(elTag);
  	});
 
 </script>
