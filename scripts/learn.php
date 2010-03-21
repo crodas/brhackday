@@ -2,6 +2,7 @@
 require "../config.php";
 require "models/sources.php";
 require "models/news.php";
+require "models/tags.php";
 require "models/lexicon.php";
 require "YQL.php";
 require "language.php";
@@ -33,6 +34,19 @@ foreach ($news as $item) {
         $item->tags      = $keywords;
         $item->lang      = $lang;
         $item->save();
+        
+        $tag = new Tags;
+        foreach ($keywords as $k) {
+            $tag->reset();
+            $tag->where("tag", $k);
+            if (!$tag->valid() || $tag->count() == 0) {
+                $tag->tag = $k;
+                $tag->save();
+            }
+            $tag->count++;
+            $tag->save();
+        }
+
     } catch (Exception $e) {
     }
 }

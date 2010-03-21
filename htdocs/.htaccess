@@ -1,0 +1,7 @@
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^json.tags.js$ json.tags.php
+
+</IfModule>

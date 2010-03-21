@@ -260,7 +260,7 @@ function treeViewWords(tag)
 		<div class="yui-gd">		 
 	    	<div id="tagleft" class="yui-u first"> 
 	    		<form id="frmtag" action="#">
-	    			<input type="text" id='q' name="t" value="Pesquisar"/>
+	    			<?php //<input type="text" id='q' name="t" value="Pesquisar"/>?>
 	    		</form>
 	    		<div id="treeDiv"></div> 
 	    	</div>
@@ -284,9 +284,13 @@ function treeViewWords(tag)
     	createNews(elTag);
  	});
  	YAHOO.util.Event.on("q","change", function(e){
+<<<<<<< HEAD:interface/pogjs.php
  		//YAHOO.log("target: " + e.target.id);
     	elTag = Dom.get(e.target).innerHTML;
     	createNews(elTag);
+=======
+ 		//alert('here');
+>>>>>>> dbe35a23e091f2f2d8a734ce855c60fc57d3d31f:htdocs/index.php
  	});
 
 </script>

@@ -1,1 +1,0 @@
-{"Results":[{"titulo":"Teste1","url":"http/\/www.uol.com.br","idtoMap":1},{"titulo":"Teste2","url":"http/\/www.terra.com.br","idtoMap":2}]}

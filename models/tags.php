@@ -7,12 +7,12 @@ class Tags extends ActiveMongo
     public $count;
 
     static $validates_presence_of = array(
-        'tag', 'lang'
+        'tag'
     );
 
     function setup()
     {
-        $this->addIndex(array("tag" => 1, "lang" => 1), array("unique" => 1));
+        $this->addIndex(array("tag" => 1), array("unique" => 1));
     }
 
 }
