@@ -1,0 +1,1 @@
+{"php":{"forca":8},"sao paulo":{"forca":3},"paulista":{"forca":4}}
