@@ -33,6 +33,19 @@ foreach ($news as $item) {
         $item->tags      = $keywords;
         $item->lang      = $lang;
         $item->save();
+        
+        $tag = new Tags;
+        foreach ($keywords as $k) {
+            $tag->clean();
+            $tag->where("tag", $k);
+            if (!$tag->valid() || $tag->count() == 0) {
+                die('here');
+                $tag->tag = $k;
+                $tag->save();
+            }
+            $tag->count++;
+        }
+
     } catch (Exception $e) {
     }
 }
