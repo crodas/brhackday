@@ -2,14 +2,12 @@
 require "../config.php";
 require "models/sources.php";
 require "models/news.php";
-require "models/lexicon.php";
 require "models/tags.php";
-require "YQL.php";
-require "language.php";
-require "textrank/textrank.php";
+
 class frontend{
 	public static function getTagCloud(){
-		
+		$tags=new Tags();
+		return $tags->where('processed',true);
 	}
 	public static function getNews($tag=NULL){
 		if($tag===NULL)
@@ -19,10 +17,11 @@ class frontend{
 	}
 	private function getAllNews(){
 		$news = new News();
-		$news->where('processed',true);
+		return $news->where('processed',true);
+		
 	}
 	private function getNewsFromTags($tag){
 		$news = new News();
-		$news->where('tag',$tag);
+		return $news->where('tag',$tag);
 	} 
 }

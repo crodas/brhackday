@@ -4,8 +4,8 @@ require "models/tags.php";
 
 $tags = new Tags;
 $arrtags = array();
-foreach ($tags->find() as $tag) {
-    $arrtags[$tag->tag] = $tag->count;
+foreach ($tags->show_popular() as $tag) {
+    $arrtags[]= array("tag" => $tag->tag, "forca" => $tag->count);
 }
 
-echo json_encode($arrtags);
+echo json_encode(array("tags" => $arrtags));

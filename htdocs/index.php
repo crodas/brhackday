@@ -91,8 +91,8 @@ body {
 <script type="text/javascript">
 var Dom = YAHOO.util.Dom,
 	YCM = YAHOO.util.Connect;
-function loadTagCloud() {
-    var elTags = {"tags":[{'tag':'php','forca':10},{'tag':'sao paulo','forca':6},{'tag':'paulista','forca':8}]}
+function loadTagCloud(elTags) {
+    //var elTags = {"tags":[{'tag':'php','forca':10},{'tag':'sao paulo','forca':6},{'tag':'paulista','forca':8}]}
 	var elCloud = document.getElementById('cloud');	
 	var oTags = elTags.tags;
 	for(i in oTags) {
@@ -112,6 +112,34 @@ function createTitleNews(title,href) {
 	elTitle.innerHTML = '<h1><a href="'+href+'" rel="nofollow">'+title+'</a></h1>';
 	return elTitle;
 }
+
+function getTags(tag) { 
+	var AjaxObject = {
+ 
+		handleSuccess:function(o) {
+			this.processResult(o);
+		}, 
+		handleFailure:function(o) {
+			alert(o.status);
+		}, 
+		processResult:function(o) {
+			loadTagCloud(eval("(" + o.responseText + ")"));	
+		}, 
+		startRequest:function() {
+			//alert('startRequest');
+	   		var transaction = YCM.asyncRequest('GET', 'json.tags.php?tag=' + tag, callback);
+		}
+ 
+	};
+	var callback = {
+		success:AjaxObject.handleSuccess,
+		failure:AjaxObject.handleFailure,
+		scope: AjaxObject
+	};
+	// Start the transaction.
+	AjaxObject.startRequest();
+}
+
 function getTheNews(tag,obj) { 
 	
 	var AjaxObject = {
@@ -132,7 +160,7 @@ function getTheNews(tag,obj) {
 		}, 
 		startRequest:function() {
 			//alert('startRequest');
-	   		var transaction = YCM.asyncRequest('GET', 'json.news.js?tag='+tag, callback);
+	   		var transaction = YCM.asyncRequest('GET', 'json.news.php?tag='+tag, callback);
 		}
  
 	};
@@ -157,8 +185,8 @@ function createNews()
 	elNews.on('click', function(e) { alert('clicked'); });
  	
 	elNews.on('contentReady', function() {
-    	var items = elNews.getElementsByTagName('li');
-    	getTheNews('php',elNews);    	
+    		var items = elNews.getElementsByTagName('li');
+    		getTheNews('php',elNews);    	
 	});
 
 }
@@ -224,16 +252,12 @@ function treeViewWords(tag)
 	   <div id="bd" role="main">
 	   		<div class="yui-g"> 
 	    		<div id="cloud">
-	    			<a href="#" class="force-1">Tag forte</a>
-	    			<a href="#" class="force-2">Tag media</a>
-	    			<a href="#" class="force-3">Tag normal</a>
-	    			<a href="#" class="force-4">Tag fraca</a>
 	    		</div>
 	    	</div> 
 		<div class="yui-gd">		 
 	    	<div id="tagleft" class="yui-u first"> 
 	    		<form id="frmtag" action="#">
-	    			<?php //<input type="text" id='q' name="t" value="Pesquisar"/>?>
+	    			<input type="text" id='q' name="t" value="Pesquisar"/>
 	    		</form>
 	    		<div id="treeDiv"></div> 
 	    	</div>
@@ -247,8 +271,8 @@ function treeViewWords(tag)
 	</div> 
 	<div id="ft" role="contentinfo"><p>Rodape</p></div> 
 </div>
-<script type="text/javascript">
-	loadTagCloud();	
+<script type="text/javascript">	
+getTags();
 	YAHOO.util.Event.on("cloud", "click", function(e) { 
     	//YAHOO.log("target: " + e.target.id);
     	elTag = Dom.get(e.target).innerHTML;

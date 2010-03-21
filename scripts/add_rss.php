@@ -2,12 +2,16 @@
 require "../config.php";
 require "models/sources.php";
 require "models/news.php";
+require "models/tags.php";
+require "models/twitter.php";
 require "YQL.php";
 
 // simple way to delete all collections and add rss to fetch
 
 Sources::drop();
 News::drop();
+Tags::drop();
+Twitter::drop();
 
 ActiveMongo::install();
 

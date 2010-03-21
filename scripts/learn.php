@@ -38,11 +38,10 @@ foreach ($news as $item) {
         $tag = new Tags;
         foreach ($keywords as $k) {
             $tag->reset();
-            $tag->where("tag", $k);
-            if (!$tag->valid() || $tag->count() == 0) {
-                $tag->tag = $k;
+	$tag->tag = $k;
+$tag->find();
+        if (!$tag->valid()) 
                 $tag->save();
-            }
             $tag->count++;
             $tag->save();
         }

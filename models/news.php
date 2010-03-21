@@ -35,4 +35,14 @@ class News extends ActiveMongo
         $this->addIndex(array("processed" => 1));
         $this->addIndex(array("processed" => 1, "updated" => 1, "created" => 1));
     }
+
+function loadByTag($tag) {
+	$col = $this->_getCollection();
+	$cursor = $col->find(array('tags' => $tag, 'processed' => true));
+	$cursor->limit(20);
+	$this->setCursor($cursor);
+
+	return $this;
+}
+
 }
