@@ -1,1 +1,11 @@
-{"php":{"forca":8},"sao paulo":{"forca":3},"paraguay":{"forca":4}}
+<?php
+require "../config.php";
+require "libs/tags.php";
+
+$tags = new Tags;
+$arrtags = array();
+foreach ($tags->find() as $tag) {
+    $arrtags[$tag->tag] = $tag->count;
+}
+
+echo json_encode($arrtags);
