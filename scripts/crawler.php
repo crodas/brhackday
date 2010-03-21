@@ -29,6 +29,7 @@ foreach ($sources as $source) {
                     $content = YQL::query("SELECT * FROM html WHERE url = :1 and xpath in({$source->xpath})", $news['link']);
                     if (@is_array($content['query']['results'])) {
                         $n->text = clean_html($content['query']['results']);
+                        $n->save();
                     }
                 } catch (Exception $e) {}
             }
