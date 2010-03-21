@@ -145,8 +145,11 @@ function createTagLink(tag,force) {
 function createTitleNews(title,href) {
 	var elTitle = document.createElement("li");
 	//elTitle.setAttribute('class','title');
-	link = '"'+href+'"'
-	elTitle.innerHTML = '<h1><a href="#" onClick="fnClickNews('+link+')" rel="nofollow">'+title+'</a></h1>';
+	//link = '"'+href+'"'
+	elTitle.innerHTML = '<h1><a id="a'+title+'", href="#" rel="nofollow">'+title+'</a></h1>';
+	YAHOO.util.event.on("a"+title, "click", function(e){
+		fnNewsClick(href);
+	});
 	return elTitle;
 }
 function getTheNews(tag,obj) { 
